@@ -9,7 +9,7 @@ arr = file.readlines()
 
 ''' Создание окна '''
 window = pygame.display.set_mode((1200, 700))
-pygame.display.set_caption("Robots vs. robots")
+pygame.display.set_caption("UFOshes")
 
 screen = pygame.Surface((1200, 700))
 background_image = pygame.image.load("space2.jpg").convert()
@@ -138,7 +138,7 @@ class Menu():
         self.punkts = punkts
         self.menu_backgroud = pygame.image.load("space3.png").convert()
         self.label_string = pygame.Surface((1200, 200))
-        self.label = pygame.font.SysFont(None, 60, True)
+        self.label = pygame.font.SysFont("Luminari", 70, True)
 
     def render(self, poverhnost, font, num_punkt):
         for i in self.punkts:
@@ -198,7 +198,7 @@ class Menu():
                         exit()
             enemy_picture.render()
 
-            self.label_string.blit(self.label.render(u"Уфошки", 1, (239, 249, 75)), (500, 60))
+            self.label_string.blit(self.label.render(u"Уфошки", 1, (239, 249, 75)), (480, 30))
             window.blit(self.label_string, (0, 0))
             window.blit(screen, (0, 150))
             pygame.display.flip()
@@ -229,7 +229,7 @@ pygame.font.init()
 projectil_inf = pygame.font.SysFont("Apple Chancery", 32)
 killed_inf = pygame.font.SysFont("Braggadocio", 32, True, True)
 hp_inf = pygame.font.SysFont("Chalkduster", 32, True, True)
-label_font = pygame.font.SysFont(None, 45, True, True)
+label_font = pygame.font.SysFont("Luminari", 45, True, True)
 game_over_string = pygame.Surface((1200, 100))
 game_over_font = pygame.font.SysFont(None, 55, True, True)
 
@@ -248,6 +248,7 @@ pygame.key.set_repeat(1, 1)
 pygame.mouse.set_visible(False)
 done = True
 chiter = False
+label_color = 0
 while done:
     for e in pygame.event.get():
         if e.type == pygame.QUIT:
@@ -439,10 +440,14 @@ while done:
         new_bonus.load_png(["plus.png"])
         bonus_arr.append([new_bonus, 0])
 
+    label_color += 1
+    if label_color > 255:
+        label_color = 50
+
     hero.render()
     info_string.blit(killed_inf.render(u"Count: " + str(count), 1, (147, 61, 255)), (175, 15))
     info_string.blit(projectil_inf.render(u"Projectiles: " + str(projectiles), 1, (62, 61, 255)), (800, -5))
-    info_string.blit(label_font.render(u"Уфошки", 1, (0, 50, 200)), (500, 10))
+    info_string.blit(label_font.render(u"Уфошки", 1, (label_color, 50, 200)), (500, -9))
     info_string.blit(hp_inf.render(u"HP: " + str(hero.hp), 1, (250, 50, 0)), (1025, 5))
 
     window.blit(info_string, (0, 0))
