@@ -1,5 +1,5 @@
 __author__ = 'dany'
-
+import pygame
 
 class Sprite:
     def __init__(self, xpos, ypos):
@@ -17,7 +17,7 @@ class Sprite:
                 self.forms.append(pygame.image.load(name))
         return self
 
-    def render(self):
+    def render(self, screen):
         screen.blit(self.bitmap, (self.x, self.y))
 
     def set_direction(self, value):
@@ -55,4 +55,5 @@ class Sprite:
             self.left()
         else:
             self.up()
+
 
