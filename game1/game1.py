@@ -9,7 +9,7 @@ arr = file.readlines()
 
 ''' Создание окна '''
 window = pygame.display.set_mode((1200, 700))
-pygame.display.set_caption("UFOshes")
+pygame.display.set_caption("UFOformses")
 
 screen = pygame.Surface((1200, 700))
 background_image = pygame.image.load("space2.jpg").convert()
@@ -21,18 +21,18 @@ enemies_step = 2
 
 class Sprite:
     def __init__(self, xpos, ypos):
-        self.sh = []
+        self.forms = []
         self.x = xpos
         self.y = ypos
         self.direction = 1
 
     def load_png(self, names):
-        if len(names) == 1:
+        if len(names) != 4:
             for i in range(4):
-                self.sh.append(pygame.image.load(names[0]))
+                self.forms.append(pygame.image.load(names[0]))
         else:
             for name in names:
-                self.sh.append(pygame.image.load(name))
+                self.forms.append(pygame.image.load(name))
         return self
 
     def render(self):
@@ -41,12 +41,9 @@ class Sprite:
     def set_direction(self, value):
         self.direction = value
 
-        if value == 4:
-            indx = 0
-        else:
-            indx = value
+        ind = value - 1
 
-        self.bitmap = self.sh[indx]
+        self.bitmap = self.forms[ind]
 
         self.bitmap.set_colorkey((250, 250, 250))
         return self
@@ -78,23 +75,23 @@ class Sprite:
             self.up()
 
 
-class Spaceship(Sprite):
+class Spaceformsip(Sprite):
     def __init__(self, xpos, ypos):
         Sprite.__init__(self, xpos, ypos)
         self.hp = 10
 
 
-class Hero(Spaceship):
+class Hero(Spaceformsip):
     def __init__(self, xpos, ypos):
-        Spaceship.__init__(self, xpos, ypos)
+        Spaceformsip.__init__(self, xpos, ypos)
         self.level = 1
         self.projectiles = 20
         self.step = 10
 
 
-class UFO(Spaceship):
+class UFO(Spaceformsip):
     def __init__(self, xpos, ypos):
-        Spaceship.__init__(self, xpos, ypos)
+        Spaceformsip.__init__(self, xpos, ypos)
         self.step = enemies_step
 
 
@@ -236,7 +233,7 @@ game_over_font = pygame.font.SysFont(None, 55, True, True)
 game = Menu(punkts)
 game.menu()
 
-hero = Hero(xpos=600, ypos=300).load_png(["sh4.png", "sh1.png", "sh2.png", "sh3.png"])
+hero = Hero(xpos=600, ypos=300).load_png(["sh1.png", "sh2.png", "sh3.png", "sh4.png"])
 hero.set_direction(random.randint(0, 3))
 hero.step = 4
 
@@ -254,19 +251,19 @@ while done:
         if e.type == pygame.QUIT:
             done = False
         if e.type == pygame.KEYDOWN:
-            if (e.key == pygame.K_UP or e.key == pygame.K_w) and hero.y > 0:
+            if (e.key == pygame.K_UP or e.key == pygame.K_w or e.key == 172) and hero.y > 0:
                 spawn += 1
                 hero.up()
 
-            if (e.key == pygame.K_DOWN or e.key == pygame.K_s) and hero.y < 700 - hero.step:
+            if (e.key == pygame.K_DOWN or e.key == pygame.K_s or e.key == 161) and hero.y < 700 - hero.step:
                 spawn += 1
                 hero.down()
 
-            if (e.key == pygame.K_LEFT or e.key == pygame.K_a) and hero.x > 0:
+            if (e.key == pygame.K_LEFT or e.key == pygame.K_a or e.key == 160) and hero.x > 0:
                 spawn += 1
                 hero.left()
 
-            if (e.key == pygame.K_RIGHT or e.key == pygame.K_d) and hero.x < 1100 - hero.step:
+            if (e.key == pygame.K_RIGHT or e.key == pygame.K_d or e.key == 162) and hero.x < 1100 - hero.step:
                 spawn += 1
                 hero.right()
 
@@ -290,7 +287,7 @@ while done:
                     projectiles -= 1
 
                     new_projectile = Sprite(hero.x + 52, hero.y + 52).load_png(
-                        ["proj4.png", "proj1.png", "proj2.png", "proj3.png"])
+                        ["proj1.png", "proj2.png", "proj3.png", "proj4.png"])
 
                     new_projectile.set_direction(hero.direction)
                     new_projectile.in_label = True
@@ -365,7 +362,7 @@ while done:
 
                 info_string.blit(killed_inf.render(u"Count: " + str(count), 1, (147, 61, 255)), (175, 15))
                 info_string.blit(projectil_inf.render(u"Projectiles: " + str(projectiles), 1, (62, 61, 255)), (800, -5))
-                info_string.blit(label_font.render(u"Spaceships", 1, (0, 50, 200)), (500, 10))
+                info_string.blit(label_font.render(u"Spaceformsips", 1, (0, 50, 200)), (500, 10))
                 info_string.blit(hp_inf.render(u"HP: " + str(hero.hp), 1, (250, 50, 0)), (1025, 5))
 
                 window.blit(info_string, (0, 0))
