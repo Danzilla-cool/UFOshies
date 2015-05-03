@@ -22,7 +22,7 @@ if __name__ == '__main__':
 
     ''' Creating window '''
     window = pygame.display.set_mode((DISPLAY_WIDTH, DISPLAY_HEIGHT), HWSURFACE | DOUBLEBUF | RESIZABLE)
-    pygame.display.set_caption("UFOshes")
+    pygame.display.set_caption("UFOshies")
 
     screen = pygame.Surface((DISPLAY_WIDTH, DISPLAY_HEIGHT))
     background_image = pygame.image.load(TEXTURE_PATH + "space2.jpg").convert()
