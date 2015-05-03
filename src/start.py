@@ -1,6 +1,7 @@
 __author__ = 'dany'
 import time
 import pygame
+import math
 
 ''' import my classes '''
 from src.classes.sprite import Sprite
@@ -18,9 +19,9 @@ if __name__ == '__main__':
     file = open("record.txt", "r+")
     arr = file.readlines()
 
-    ''' Создание окна '''
+    ''' Creating window '''
     window = pygame.display.set_mode((1200, 700))
-    pygame.display.set_caption("UFOformses")
+    pygame.display.set_caption("UFOshes")
 
     screen = pygame.Surface((1200, 700))
     background_image = pygame.image.load(TEXTURE_PATH + "space2.jpg").convert()
@@ -32,6 +33,8 @@ if __name__ == '__main__':
     bonus_level = 70
     spawn = 0
     enemies_step = 2
+
+    hero_moving = False
 
     ufo_min_hp = 3
     ufo_max_hp = 6
@@ -75,18 +78,22 @@ if __name__ == '__main__':
                 done = False
             if e.type == pygame.KEYDOWN:
                 if (e.key == pygame.K_UP or e.key == pygame.K_w or e.key == 172) and hero.y > 0:
+                    hero_moving = True
                     spawn += 1
                     hero.up()
 
                 if (e.key == pygame.K_DOWN or e.key == pygame.K_s or e.key == 161) and hero.y < 700 - hero.step:
+                    hero_moving = True
                     spawn += 1
                     hero.down()
 
                 if (e.key == pygame.K_LEFT or e.key == pygame.K_a or e.key == 160) and hero.x > 0:
+                    hero_moving = True
                     spawn += 1
                     hero.left()
 
                 if (e.key == pygame.K_RIGHT or e.key == pygame.K_d or e.key == 162) and hero.x < 1100 - hero.step:
+                    hero_moving = True
                     spawn += 1
                     hero.right()
 
@@ -101,7 +108,7 @@ if __name__ == '__main__':
                         chiter = False
 
                 if e.key == pygame.K_ESCAPE:
-                    menu.show()
+                    menu.show(screen, window)
                     pygame.key.set_repeat(1, 1)
                     pygame.mouse.set_visible(False)
 
@@ -187,7 +194,7 @@ if __name__ == '__main__':
                     info_string.blit(killed_inf.render(u"Count: " + str(count), 1, (147, 61, 255)), (175, 15))
                     info_string.blit(projectil_inf.render(u"Projectiles: " + str(projectiles), 1, (62, 61, 255)),
                                      (800, -5))
-                    info_string.blit(label_font.render(u"Spaceformsips", 1, (0, 50, 200)), (500, 10))
+                    info_string.blit(label_font.render(u"Уфошки", 1, (label_color, 50, 200)), (500, -9))
                     info_string.blit(hp_inf.render(u"HP: " + str(hero.hp), 1, (250, 50, 0)), (1025, 5))
 
                     window.blit(info_string, (0, 0))
@@ -199,7 +206,7 @@ if __name__ == '__main__':
 
                     time.sleep(2)
 
-                    menu.show()
+                    menu.show(screen, window)
 
                     pygame.key.set_repeat(1, 1)
                     pygame.mouse.set_visible(False)

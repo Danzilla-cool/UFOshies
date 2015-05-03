@@ -52,9 +52,7 @@ class Menu():
                     exit()
                 if e.type == pygame.KEYDOWN:
                     if e.key == pygame.K_ESCAPE:
-                        game.show()
-                        pygame.key.set_repeat(1, 1)
-                        pygame.mouse.set_visible(False)
+                        exit()
                     if e.key == pygame.K_UP:
                         if punkt > 0:
                             punkt -= 1
