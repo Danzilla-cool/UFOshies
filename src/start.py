@@ -282,3 +282,5 @@ if __name__ == '__main__':
         window.blit(info_string, (0, 0))
         window.blit(screen, (0, 50))
         pygame.display.flip()
+
+        pygame.time.delay(100)
