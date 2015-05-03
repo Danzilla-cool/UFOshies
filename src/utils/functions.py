@@ -32,6 +32,7 @@ def get_random_coordinates(Dx, Dy, levelx, levely, o):
 
     return [x_res, y_res]
 
+
 def get_delay():
     delay = 0
     os = platform.system()
