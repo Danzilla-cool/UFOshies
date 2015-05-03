@@ -8,3 +8,4 @@ class Hero(Spaceship):
         self.level = 1
         self.projectiles = 20
         self.step = 10
+

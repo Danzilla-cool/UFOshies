@@ -34,8 +34,6 @@ if __name__ == '__main__':
     spawn = 0
     enemies_step = 2
 
-    hero_moving = False
-
     ufo_min_hp = 3
     ufo_max_hp = 6
 
@@ -44,7 +42,8 @@ if __name__ == '__main__':
     bonus_arr = []
 
     punkts = [(510, 300, "Start Game", (250, 250, 30), (250, 30, 250), 0),
-              (560, 350, "Quit", (250, 250, 30), (250, 30, 250), 1)]
+              (545, 350, "Settings", (250, 250, 30), (250, 30, 250), 1),
+              (566, 400, "Quit", (250, 250, 30), (250, 30, 250), 2)]
 
     pygame.font.init()
 
@@ -59,8 +58,9 @@ if __name__ == '__main__':
     menu.show(screen, window)
 
     hero = Hero(xpos=600, ypos=300).load_png(
-        [TEXTURE_PATH + "sh1.png", TEXTURE_PATH + "sh2.png", TEXTURE_PATH + "sh3.png", TEXTURE_PATH + "sh4.png"])
-    hero.set_direction(random.randint(0, 3))
+        [TEXTURE_PATH + "sh1.png", TEXTURE_PATH + "sh2.png", TEXTURE_PATH + "sh3.png", TEXTURE_PATH + "sh4.png",
+         TEXTURE_PATH + "fire1.png", TEXTURE_PATH + "fire2.png", TEXTURE_PATH + "fire3.png",
+         TEXTURE_PATH + "fire4.png"])
     hero.step = 4
 
     pygame.key.set_repeat(1, 1)
@@ -72,28 +72,27 @@ if __name__ == '__main__':
     done = True
     chiter = False
     label_color = 0
+
+    hero.set_direction(1)
+
     while done:
         for e in pygame.event.get():
             if e.type == pygame.QUIT:
                 done = False
             if e.type == pygame.KEYDOWN:
                 if (e.key == pygame.K_UP or e.key == pygame.K_w or e.key == 172) and hero.y > 0:
-                    hero_moving = True
                     spawn += 1
                     hero.up()
 
                 if (e.key == pygame.K_DOWN or e.key == pygame.K_s or e.key == 161) and hero.y < 700 - hero.step:
-                    hero_moving = True
                     spawn += 1
                     hero.down()
 
                 if (e.key == pygame.K_LEFT or e.key == pygame.K_a or e.key == 160) and hero.x > 0:
-                    hero_moving = True
                     spawn += 1
                     hero.left()
 
                 if (e.key == pygame.K_RIGHT or e.key == pygame.K_d or e.key == 162) and hero.x < 1100 - hero.step:
-                    hero_moving = True
                     spawn += 1
                     hero.right()
 
@@ -125,9 +124,9 @@ if __name__ == '__main__':
                         projectiles_arr.append(new_projectile)
 
 
-        # screen.fill((62, 15, 255))
         screen.blit(background_image, [0, 0])
         info_string.fill((172, 212, 33))
+
 
         for enemy in enem_arr:
             if hero.x > enemy.x:
@@ -274,6 +273,7 @@ if __name__ == '__main__':
             label_color = 50
 
         hero.render(screen)
+        hero.set_direction(hero.direction)
         info_string.blit(killed_inf.render(u"Count: " + str(count), 1, (147, 61, 255)), (175, 15))
         info_string.blit(projectil_inf.render(u"Projectiles: " + str(projectiles), 1, (62, 61, 255)), (800, -5))
         info_string.blit(label_font.render(u"Уфошки", 1, (label_color, 50, 200)), (500, -9))
@@ -283,4 +283,4 @@ if __name__ == '__main__':
         window.blit(screen, (0, 50))
         pygame.display.flip()
 
-        pygame.time.delay(100)
+        pygame.time.delay(0)

@@ -1,6 +1,7 @@
 __author__ = 'dany'
 import random
 
+''' import my classes '''
 
 def intersect(x1, x2, y1, y2, q1, q2, q3, q4):
     if (x1 > x2 - q1) and (x1 < x2 + q2) and (y1 > y2 - q3) and (y1 < y2 + q4):

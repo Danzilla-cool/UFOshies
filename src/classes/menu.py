@@ -62,13 +62,13 @@ class Menu():
                     if e.key == 13:  # 13 - код enter'а
                         if punkt == 0:
                             done = False
-                        elif punkt == 1:
+                        elif punkt == 2:
                             exit()
 
                 if e.type == pygame.MOUSEBUTTONDOWN and e.button == 1:
                     if punkt == 0:
                         done = False
-                    elif punkt == 1:
+                    elif punkt == 2:
                         exit()
             enemy_picture.render(screen)
 
