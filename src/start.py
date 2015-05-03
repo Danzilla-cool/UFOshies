@@ -20,10 +20,10 @@ if __name__ == '__main__':
     arr = file.readlines()
 
     ''' Creating window '''
-    window = pygame.display.set_mode((1200, 700))
+    window = pygame.display.set_mode((DISPLAY_WIDTH, DISPLAY_HEIGHT))
     pygame.display.set_caption("UFOshes")
 
-    screen = pygame.Surface((1200, 700))
+    screen = pygame.Surface((DISPLAY_WIDTH, DISPLAY_HEIGHT))
     background_image = pygame.image.load(TEXTURE_PATH + "space2.jpg").convert()
 
     info_string = pygame.Surface((1200, 50))
