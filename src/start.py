@@ -35,8 +35,11 @@ if __name__ == '__main__':
     spawn = 0
     enemies_step = 2
 
-    ufo_min_hp = 3
-    ufo_max_hp = 6
+    ufo_min_hp = 5
+    ufo_max_hp = 7
+
+    projectiles_min_give = 7
+    projectiles_max_give = 12
 
     projectiles_arr = []
     enem_arr = []
@@ -48,7 +51,7 @@ if __name__ == '__main__':
 
     pygame.font.init()
 
-    projectil_inf = pygame.font.SysFont("Apple Chancery", 32)
+    projectile_inf = pygame.font.SysFont("Apple Chancery", 32)
     killed_inf = pygame.font.SysFont("Braggadocio", 32, True, True)
     hp_inf = pygame.font.SysFont("Chalkduster", 32, True, True)
     label_font = pygame.font.SysFont("Luminari", 45, True, True)
@@ -58,23 +61,27 @@ if __name__ == '__main__':
     menu = Menu(punkts)
     menu.show(screen, window)
 
-    hero = Hero(xpos=600, ypos=300).load_png(
+    hero = Hero(xpos=550, ypos=300)
+
+    hero.load_png(
         [TEXTURE_PATH + "sh1.png", TEXTURE_PATH + "sh2.png", TEXTURE_PATH + "sh3.png", TEXTURE_PATH + "sh4.png",
          TEXTURE_PATH + "fire1.png", TEXTURE_PATH + "fire2.png", TEXTURE_PATH + "fire3.png",
          TEXTURE_PATH + "fire4.png"])
+
     hero.step = 4
 
     pygame.key.set_repeat(1, 1)
-    projectile_step = 12
+    projectile_step = 15
     projectiles = 20
     once = True
     pygame.key.set_repeat(1, 1)
     pygame.mouse.set_visible(False)
+
     done = True
-    chiter = False
+
     label_color = 0
 
-    hero.set_direction(1)
+    hero.set_direction(4)
 
     while done:
         for e in pygame.event.get():
@@ -97,16 +104,6 @@ if __name__ == '__main__':
                     spawn += 1
                     hero.right()
 
-                if e.key == pygame.K_h:
-                    if not chiter:
-                        hero.step += 30
-                        projectile_step += 30
-                        chiter = True
-                    else:
-                        hero.step -= 30
-                        projectile_step -= 30
-                        chiter = False
-
                 if e.key == pygame.K_ESCAPE:
                     menu.show(screen, window)
                     pygame.key.set_repeat(1, 1)
@@ -124,10 +121,8 @@ if __name__ == '__main__':
                         new_projectile.in_label = True
                         projectiles_arr.append(new_projectile)
 
-
-        screen.blit(background_image, [0, 0])
-        info_string.fill((172, 212, 33))
-
+        screen.blit(background_image, (0, 0))
+        info_string.fill((183, 0, 144))
 
         for enemy in enem_arr:
             if hero.x > enemy.x:
@@ -141,34 +136,41 @@ if __name__ == '__main__':
                 enemy.y -= enemy.step
 
         if spawn == spawn_level or once:
-            e_x, e_y = get_random_coordinates(1200, 700, 50, 50, 10)
-            new_enemy = UFO(e_x, e_y, enemies_step).load_png([TEXTURE_PATH + "Alien.png"])
-            new_enemy.set_direction(hero.direction)
+            rand_x, rand_y = get_random_coordinates(1200, 700, 50, 50, 10)
+            new_enemy = UFO(rand_x, rand_y, enemies_step).load_png([TEXTURE_PATH + "Alien.png"])
+            # new_enemy.set_direction(hero.direction)
             new_enemy.hp = random.randint(ufo_min_hp, ufo_max_hp)
             enem_arr.append(new_enemy)
             spawn = 0
-            once = False
+
+            if once:
+                once = False
 
         m = 0
         while m < len(bonus_arr):
+            deleted = False
             bon = bonus_arr[m][0]
             bon.set_direction(4)
             bon.render(screen)
             if intersect(hero.x, bon.x, hero.y, bon.y, 100, 100, 50, 100):
-                hero.hp += 2
+                hero.hp += 3
                 if hero.hp > 10:
                     hero.hp = 10
-                projectiles += 5
+                projectiles += random.randint(projectiles_min_give, projectiles_max_give)
                 del bonus_arr[m]
             else:
                 bonus_arr[m][1] += 1
                 if bonus_arr[m][1] > bonus_level:
                     del bonus_arr[m]
-            m += 1
+                    deleted = True
+            if not deleted:
+                m += 1
 
         j = 0
         while j < len(enem_arr):
+            deleted = False
             enemy = enem_arr[j]
+            enemy.set_direction(hero.direction)
             enemy.render(screen)
             if intersect(hero.x, enemy.x, hero.y, enemy.y, 90, 90, 80, 80):
                 hero.hp -= 1
@@ -176,8 +178,9 @@ if __name__ == '__main__':
 
                 if enemy.hp <= 0:
                     del enem_arr[j]
+                    deleted = True
                     count += 1
-                    projectiles += random.randint(1, 5)
+                    projectiles += random.randint(projectiles_min_give, projectiles_max_give)
 
                 if hero.hp <= 0:
                     file.write(str(count) + "\n")
@@ -192,7 +195,7 @@ if __name__ == '__main__':
                     pygame.display.flip()
 
                     info_string.blit(killed_inf.render(u"Count: " + str(count), 1, (147, 61, 255)), (175, 15))
-                    info_string.blit(projectil_inf.render(u"Projectiles: " + str(projectiles), 1, (62, 61, 255)),
+                    info_string.blit(projectile_inf.render(u"Projectiles: " + str(projectiles), 1, (62, 61, 255)),
                                      (800, -5))
                     info_string.blit(label_font.render(u"Уфошки", 1, (label_color, 50, 200)), (500, -9))
                     info_string.blit(hp_inf.render(u"HP: " + str(hero.hp), 1, (250, 50, 0)), (1025, 5))
@@ -207,15 +210,30 @@ if __name__ == '__main__':
                     time.sleep(2)
 
                     menu.show(screen, window)
-
                     pygame.key.set_repeat(1, 1)
                     pygame.mouse.set_visible(False)
+
                     break
-            j += 1
+            if not deleted:
+                j += 1
 
         i = 0
         while i < len(projectiles_arr):
             projectile = projectiles_arr[i]
+            deleted = False
+
+            if projectile.direction == 1:
+                projectile.x += projectile_step
+            elif projectile.direction == 2:
+                projectile.y += projectile_step
+            elif projectile.direction == 3:
+                projectile.x -= projectile_step
+            elif projectile.direction == 4:
+                projectile.y -= projectile_step
+
+            if projectile.x < 0 or projectile.y < 0 or projectile.x > 1190 or projectile.y > 690:
+                projectile.in_label = False
+
             if projectile.in_label:
                 projectile.render(screen)
                 k = 0
@@ -223,34 +241,23 @@ if __name__ == '__main__':
                     enemy = enem_arr[k]
                     if intersect(projectile.x, enemy.x, projectile.y, enemy.y, 20, 100, 50, 90):
                         enemy.hp -= 1
-                        try:
-                            del projectiles_arr[i]
-                        except IndexError:
-                            print(i, projectiles_arr)
-                            exit()
+                        del projectiles_arr[i]
+                        deleted = True
                         if enemy.hp == 0:
                             if (count + 1) % 10 == 0:
-                                enemies_step += 0.1
+                                enemies_step += 0.25
                                 hero.level += 1
                                 hero.step += 1
                                 ufo_min_hp, ufo_max_hp = ufo_min_hp + 1, ufo_max_hp + 1
 
                             count += 1
-                            projectiles += random.randint(5, 7)
+                            projectiles += random.randint(projectiles_min_give, projectiles_max_give)
                             del enem_arr[k]
+                            break
                     k += 1
-                if projectile.direction == 1:
-                    projectile.x += projectile_step
-                elif projectile.direction == 2:
-                    projectile.y += projectile_step
-                elif projectile.direction == 3:
-                    projectile.x -= projectile_step
-                elif projectile.direction == 4:
-                    projectile.y -= projectile_step
 
-            if projectile.x < 0 or projectile.y < 0 or projectile.x > 1190 or projectile.y > 690:
-                projectile.in_label = False
-            i += 1
+            if not deleted:
+                i += 1
 
         if hero.x < 10:
             hero.x = 1060
@@ -276,7 +283,7 @@ if __name__ == '__main__':
         hero.render(screen)
         hero.set_direction(hero.direction)
         info_string.blit(killed_inf.render(u"Count: " + str(count), 1, (147, 61, 255)), (175, 15))
-        info_string.blit(projectil_inf.render(u"Projectiles: " + str(projectiles), 1, (62, 61, 255)), (800, -5))
+        info_string.blit(projectile_inf.render(u"Projectiles: " + str(projectiles), 1, (62, 61, 255)), (800, -5))
         info_string.blit(label_font.render(u"Уфошки", 1, (label_color, 50, 200)), (500, -9))
         info_string.blit(hp_inf.render(u"HP: " + str(hero.hp), 1, (250, 50, 0)), (1025, 5))
 

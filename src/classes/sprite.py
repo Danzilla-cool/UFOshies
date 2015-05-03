@@ -10,7 +10,7 @@ class Sprite:
         self.direction_fire = "fire1"
 
     def load_png(self, names):
-        if len(names) >= 4:
+        if len(names) == 4:
             for i in range(len(names)):
                 self.forms.append(pygame.image.load(names[i]))
         elif len(names) == 1:
