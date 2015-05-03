@@ -1,7 +1,8 @@
 __author__ = 'dany'
 import random
+import platform
+from src.utils.constants import *
 
-''' import my classes '''
 
 def intersect(x1, x2, y1, y2, q1, q2, q3, q4):
     if (x1 > x2 - q1) and (x1 < x2 + q2) and (y1 > y2 - q3) and (y1 < y2 + q4):
@@ -30,3 +31,16 @@ def get_random_coordinates(Dx, Dy, levelx, levely, o):
             y_res = random.randint(Dy - levely, Dy - o)
 
     return [x_res, y_res]
+
+def get_delay():
+    delay = 0
+    os = platform.system()
+
+    if os == "Windows":
+        delay = WINDOWS_DELAY
+    elif os == "Darwin":
+        delay = MACOS_DELAY
+    elif os == "Linux":
+        delay = LINUX_DELAY
+
+    return delay
