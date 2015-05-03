@@ -14,7 +14,7 @@ def intersect(x1, x2, y1, y2, q1, q2, q3, q4):
 def get_random_coordinates(Dx, Dy, levelx, levely, o):
     zones = random.choice([True, False])  # В 1 и 2 или 3 и 4 зоне будет
     if zones:
-        zone = random.choice([1, 2])  # В 1 или 2 зоне
+        zone = random.choice([1, 2])  #В 1 или 2 зоне
         if zone == 1:
             x_res = random.randint(o, levelx)
             y_res = random.randint(levely, Dy - levely)
