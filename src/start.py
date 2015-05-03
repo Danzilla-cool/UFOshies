@@ -1,6 +1,7 @@
 __author__ = 'dany'
 import time
 import pygame
+from pygame.locals import *
 import math
 
 ''' import my classes '''
@@ -20,7 +21,7 @@ if __name__ == '__main__':
     arr = file.readlines()
 
     ''' Creating window '''
-    window = pygame.display.set_mode((DISPLAY_WIDTH, DISPLAY_HEIGHT))
+    window = pygame.display.set_mode((DISPLAY_WIDTH, DISPLAY_HEIGHT), HWSURFACE | DOUBLEBUF | RESIZABLE)
     pygame.display.set_caption("UFOshes")
 
     screen = pygame.Surface((DISPLAY_WIDTH, DISPLAY_HEIGHT))
@@ -284,3 +285,4 @@ if __name__ == '__main__':
         pygame.display.flip()
 
         pygame.time.delay(get_delay())
+    file.close()
