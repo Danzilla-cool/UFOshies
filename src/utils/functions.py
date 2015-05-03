@@ -42,5 +42,4 @@ def get_delay():
         delay = MACOS_DELAY
     elif os == "Linux":
         delay = LINUX_DELAY
-
     return delay
