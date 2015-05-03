@@ -22,3 +22,19 @@ class UFO(Spaceship):
             self.bitmap = self.forms[1]
         else:
             self.bitmap = self.forms[0]
+
+    def up(self):
+        self.direction = 4
+        self.y -= self.step
+
+    def right(self):
+        self.direction = 1
+        self.x += self.step
+
+    def down(self):
+        self.direction = 2
+        self.y += self.step
+
+    def left(self):
+        self.direction = 3
+        self.x -= self.step

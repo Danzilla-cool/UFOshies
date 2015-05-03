@@ -33,14 +33,14 @@ if __name__ == '__main__':
     spawn_level = 40
     bonus_level = 70
     spawn = 0
-    enemies_step = 2
+    enemies_step = 3
 
     projectiles_arr = []
     enem_arr = []
     bonus_arr = []
 
     punkts = [(510, 300, "Start Game", (250, 250, 30), (250, 30, 250), 0),
-              (545, 350, "Settings", (250, 250, 30), (250, 30, 250), 1),
+              (545, 350, "Settings (not yet)", (250, 250, 30), (250, 30, 250), 1),
               (566, 400, "Quit", (250, 250, 30), (250, 30, 250), 2)]
 
     pygame.font.init()
@@ -62,7 +62,7 @@ if __name__ == '__main__':
          TEXTURE_PATH + "fire1.png", TEXTURE_PATH + "fire2.png", TEXTURE_PATH + "fire3.png",
          TEXTURE_PATH + "fire4.png"])
 
-    hero.step = 4
+    hero.step = 5
 
     pygame.key.set_repeat(1, 1)
     projectile_step = 15
@@ -119,14 +119,14 @@ if __name__ == '__main__':
 
         for enemy in enem_arr:
             if hero.x > enemy.x:
-                enemy.x += enemy.step
+                enemy.right()
             else:
-                enemy.x -= enemy.step
+                enemy.left()
 
             if hero.y > enemy.y:
-                enemy.y += enemy.step
+                enemy.down()
             else:
-                enemy.y -= enemy.step
+                enemy.up()
 
         if spawn == spawn_level or once:
             rand_x, rand_y = get_random_coordinates(1200, 700, 50, 50, 10)
@@ -183,23 +183,35 @@ if __name__ == '__main__':
                     enem_arr = []
                     pygame.key.set_repeat(1, 1)
 
-                    game_over_string.fill((50, 50, 50))
-                    game_over_string.blit(game_over_font.render(u"GAME OVER", 1, (245, 36, 75)), (450, 35))
-                    window.blit(game_over_string, (0, 350))
-                    pygame.display.flip()
+                    game_over_string_color = 255
 
-                    info_string.blit(killed_inf.render(u"Count: " + str(count), 1, (147, 61, 255)), (175, 15))
-                    info_string.blit(projectile_inf.render(u"Projectiles: " + str(projectiles), 1, (62, 61, 255)),
-                                     (800, -5))
-                    info_string.blit(label_font.render(u"Уфошки", 1, (label_color, 50, 200)), (500, -9))
-                    info_string.blit(hp_inf.render(u"HP: " + str(hero.hp), 1, (250, 50, 0)), (1025, 5))
+                    while game_over_string_color >= 50:
+                        game_over_string.fill((50, 50, game_over_string_color))
+                        game_over_string.blit(game_over_font.render(u"GAME OVER", 1, (245, 36, 75)), (450, 35))
+                        window.blit(game_over_string, (0, 350))
+                        info_string.blit(killed_inf.render(u"Count: " + str(count), 1, (147, 61, 255)), (175, 15))
+                        info_string.blit(projectile_inf.render(u"Projectiles: " + str(projectiles), 1, (62, 61, 255)),
+                                         (800, -5))
+                        info_string.blit(label_font.render(u"Уфошки", 1, (label_color, 50, 200)), (500, -9))
+                        info_string.blit(hp_inf.render(u"HP: " + str(hero.hp), 1, (250, 50, 0)), (1025, 5))
+                        window.blit(info_string, (0, 0))
+                        pygame.display.flip()
 
-                    window.blit(info_string, (0, 0))
-                    pygame.display.flip()
+                        game_over_string_color -= 5
+
                     hero.hp = 10
                     count = 0
-                    projectiles = 10
+                    projectiles = 20
                     spawn = 0
+
+                    hero.x = 550
+                    hero.y = 300
+
+                    hero.set_direction(4)
+
+                    projectiles_arr = []
+                    enem_arr = []
+                    bonus_arr = []
 
                     time.sleep(2)
 
@@ -239,9 +251,9 @@ if __name__ == '__main__':
                         deleted = True
                         if enemy.hp == 0:
                             if (count + 1) % 10 == 0:
-                                enemies_step += 0.25
+                                enemies_step += 1
                                 hero.level += 1
-                                hero.step += 1
+                                hero.step += 2
                                 ufo_min_hp, ufo_max_hp = ufo_min_hp + 1, ufo_max_hp + 1
 
                             count += 1
