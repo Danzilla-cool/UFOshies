@@ -7,7 +7,6 @@ class Sprite:
         self.x = xpos
         self.y = ypos
         self.direction = 1
-        self.direction_fire = "fire1"
 
     def load_png(self, names):
         if len(names) == 4:

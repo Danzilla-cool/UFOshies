@@ -35,12 +35,6 @@ if __name__ == '__main__':
     spawn = 0
     enemies_step = 2
 
-    ufo_min_hp = 5
-    ufo_max_hp = 7
-
-    projectiles_min_give = 7
-    projectiles_max_give = 12
-
     projectiles_arr = []
     enem_arr = []
     bonus_arr = []
@@ -82,7 +76,6 @@ if __name__ == '__main__':
     label_color = 0
 
     hero.set_direction(4)
-
     while done:
         for e in pygame.event.get():
             if e.type == pygame.QUIT:
@@ -137,14 +130,15 @@ if __name__ == '__main__':
 
         if spawn == spawn_level or once:
             rand_x, rand_y = get_random_coordinates(1200, 700, 50, 50, 10)
-            new_enemy = UFO(rand_x, rand_y, enemies_step).load_png([TEXTURE_PATH + "Alien.png"])
-            # new_enemy.set_direction(hero.direction)
-            new_enemy.hp = random.randint(ufo_min_hp, ufo_max_hp)
-            enem_arr.append(new_enemy)
-            spawn = 0
-
+            new_enemy = UFO(rand_x, rand_y, enemies_step)
+            new_enemy.load_png(
+                [TEXTURE_PATH + "Alien.png", TEXTURE_PATH + "Alien2.png", TEXTURE_PATH + "Alien3.png"])
             if once:
                 once = False
+            new_enemy.hp = random.randint(ufo_min_hp, ufo_max_hp)
+            new_enemy.update()
+            enem_arr.append(new_enemy)
+            spawn = 0
 
         m = 0
         while m < len(bonus_arr):
@@ -170,7 +164,7 @@ if __name__ == '__main__':
         while j < len(enem_arr):
             deleted = False
             enemy = enem_arr[j]
-            enemy.set_direction(hero.direction)
+            enemy.update()
             enemy.render(screen)
             if intersect(hero.x, enemy.x, hero.y, enemy.y, 90, 90, 80, 80):
                 hero.hp -= 1
@@ -282,7 +276,7 @@ if __name__ == '__main__':
 
         hero.render(screen)
         hero.set_direction(hero.direction)
-        info_string.blit(killed_inf.render(u"Count: " + str(count), 1, (147, 61, 255)), (175, 15))
+        info_string.blit(killed_inf.render(u"Count: " + str(count), 1, (38, 0, 153)), (175, 15))
         info_string.blit(projectile_inf.render(u"Projectiles: " + str(projectiles), 1, (62, 61, 255)), (800, -5))
         info_string.blit(label_font.render(u"Уфошки", 1, (label_color, 50, 200)), (500, -9))
         info_string.blit(hp_inf.render(u"HP: " + str(hero.hp), 1, (250, 50, 0)), (1025, 5))
