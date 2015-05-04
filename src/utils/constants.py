@@ -1,5 +1,5 @@
 __author__ = 'dany'
-TEXTURE_PATH = "./textures/"
+TEXTURE_PATH = "./src/textures/"
 
 '''Os delays'''
 MACOS_DELAY = 0

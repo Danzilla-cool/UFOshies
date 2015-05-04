@@ -56,9 +56,13 @@ class Menu():
                     if e.key == pygame.K_UP:
                         if punkt > 0:
                             punkt -= 1
+                        elif punkt == 0:
+                            punkt = len(self.punkts) - 1
                     if e.key == pygame.K_DOWN:
                         if punkt < len(self.punkts) - 1:
                             punkt += 1
+                        elif punkt == len(self.punkts) - 1:
+                            punkt = 0
                     if e.key == 13:  # 13 - код enter'а
                         if punkt == 0:
                             done = False
